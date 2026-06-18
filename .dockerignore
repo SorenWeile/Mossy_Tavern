@@ -1,0 +1,44 @@
+﻿# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test
+coverage/
+
+# Local files
+.env*
+.docker/
+
+# Documentation
+*.md
+LICENSE
+INSTRUCTIONS.md
+
+# Batch files
+*.bat
+
+# Docker files (keep Dockerfile and docker-compose*)
+!Dockerfile
+docker-compose*.yml
+nginx.conf
