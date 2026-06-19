@@ -60,22 +60,18 @@ docker-compose -f docker-compose-full.yml up -d
 
 ## 🐳 Docker Troubleshooting
 
-### Stable Diffusion "denied" Error
-The AUTOMATIC1111 image may be rate-limited or unavailable. Try:
+### Stable Diffusion image unavailable
+`ghcr.io/automatic1111/stable-diffusion-webui` is no longer published, so `docker-compose-full.yml`
+now uses the actively maintained `ghcr.io/ai-dock/stable-diffusion-webui:latest-cuda` image instead
+(same WebUI, same `/sdapi/v1/txt2img` API). If a pull still fails:
 
 1. **Pull manually first:**
    ```bash
-   docker pull ghcr.io/automatic1111/stable-diffusion-webui:latest
+   docker pull ghcr.io/ai-dock/stable-diffusion-webui:latest-cuda
    docker-compose -f docker-compose-full.yml up -d
    ```
 
-2. **Use a different image:**
-   Edit `docker-compose-full.yml` and change to:
-   ```yaml
-   image: stabilityai/stable-diffusion:latest
-   ```
-
-3. **Run separately:**
+2. **Run separately:**
    Install Stable Diffusion WebUI manually and run it independently.
 
 ### Ollama Issues
@@ -104,13 +100,24 @@ npm install
 npm start
 ```
 
-The app will connect to localhost:11434 and localhost:7860 by default.
+The app will connect to localhost:11434 and localhost:7860 by default. To point it at different
+addresses without rebuilding, set `OLLAMA_URL`/`SD_URL` as environment variables on the `tavern-ui`
+container (see `docker-compose-full.yml`) - these must be addresses reachable from the browser,
+since the UI calls them client-side.
 
 ## 📜 Example Prompts
 - **Text**: "Describe a bustling tavern in Waterdeep, filled with adventurers and mysterious figures."
 - **Image**: "A cozy fantasy tavern interior, warm lighting, wooden tables, medieval style, 4k, art by John Howe"
 - **Text**: "Tell me a rumor about the local dragon, as if whispered by a drunk patron."
 - **Image**: "A halfling bard playing a lute, fantasy art, detailed, cinematic lighting"
+
+## 🔗 Resources
+- [Ollama API Docs](https://github.com/ollama/ollama/blob/main/docs/api.md)
+- [Stable Diffusion WebUI API Docs](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API)
+- [ai-dock Stable Diffusion WebUI image](https://github.com/ai-dock/stable-diffusion-webui)
+- [Fantasy Fonts](https://fonts.google.com/?category=Serif)
+- [Parchment Textures](https://www.transparenttextures.com/)
+- [D&D Icons](https://game-icons.net/)
 
 ## 🎯 Next Steps
 - [ ] Add dice roller component (d20, d6, etc.)

@@ -1,9 +1,7 @@
 ﻿# Full Docker Compose with Ollama, Stable Diffusion, and UI
 # Note: Stable Diffusion image is large (~20GB) and may take time to download
-# If you encounter "denied" errors, try:
-# 1. Pull the image first: docker pull ghcr.io/automatic1111/stable-diffusion-webui:latest
-# 2. Or use a different image like stabilityai/stable-diffusion
-# 3. Or run Stable Diffusion separately
+# Uses the ai-dock image since ghcr.io/automatic1111/stable-diffusion-webui
+# is no longer published (the original source of the README's "denied" error).
 
 services:
   ollama:
@@ -27,14 +25,15 @@ services:
       retries: 3
 
   stable-diffusion:
-    image: ghcr.io/automatic1111/stable-diffusion-webui:latest
+    image: ghcr.io/ai-dock/stable-diffusion-webui:latest-cuda
     ports:
       - "7860:7860"
     environment:
-      - COMMANDLINE_ARGS=--api --listen --no-half-vae
+      - WEBUI_ARGS=--api --listen --no-half-vae
+      - WEB_ENABLE_AUTH=false # keep the API open for the txt2img calls in App.js
+      - AUTO_UPDATE=false
     volumes:
-      - sd_data:/stable-diffusion-webui
-      - sd_output:/stable-diffusion-webui/outputs
+      - sd_data:/workspace
     deploy:
       resources:
         reservations:
@@ -62,11 +61,12 @@ services:
         condition: service_healthy
     environment:
       - NODE_ENV=production
-      - REACT_APP_OLLAMA_URL=http://ollama:11434
-      - REACT_APP_SD_URL=http://stable-diffusion:7860
+      # These must be browser-reachable addresses, not Docker-internal hostnames -
+      # the UI calls these URLs from the user's browser, not from inside the container.
+      - OLLAMA_URL=http://localhost:11434
+      - SD_URL=http://localhost:7860
     restart: unless-stopped
 
 volumes:
   ollama_data:
   sd_data:
-  sd_output:

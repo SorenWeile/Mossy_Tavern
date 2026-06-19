@@ -1,0 +1,4 @@
+window.RUNTIME_CONFIG = {
+  OLLAMA_URL: "${OLLAMA_URL}",
+  SD_URL: "${SD_URL}",
+};

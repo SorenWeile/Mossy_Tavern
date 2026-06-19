@@ -10,9 +10,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // API URLs - use environment variables or fall back to localhost
-  const ollamaUrl = process.env.REACT_APP_OLLAMA_URL || "http://localhost:11434";
-  const sdUrl = process.env.REACT_APP_SD_URL || "http://localhost:7860";
+  // API URLs - runtime config (set by Docker entrypoint) takes priority over
+  // build-time env vars, since CRA bakes REACT_APP_* in at build time and
+  // can't be overridden by docker-compose's `environment:` at container start.
+  const ollamaUrl = window.RUNTIME_CONFIG?.OLLAMA_URL || process.env.REACT_APP_OLLAMA_URL || "http://localhost:11434";
+  const sdUrl = window.RUNTIME_CONFIG?.SD_URL || process.env.REACT_APP_SD_URL || "http://localhost:7860";
 
   // Call Ollama for text generation
   const generateText = async () => {

@@ -22,8 +22,8 @@
       - ollama
     environment:
       - NODE_ENV=development
-      - REACT_APP_OLLAMA_URL=http://localhost:11434
-      - REACT_APP_SD_URL=http://localhost:7860
+      - OLLAMA_URL=http://localhost:11434
+      - SD_URL=http://localhost:7860
     restart: unless-stopped
 
 volumes:
